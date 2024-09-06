@@ -29,4 +29,3 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
-// app.use("/auth", authRoutes);
