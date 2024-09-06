@@ -44,3 +44,13 @@ exports.getQuizzes = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+exports.getSingleQuiz = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const quiz = await Quiz.findById(id);
+    res.send({ quiz });
+  } catch (error) {
+    console.error("Quiz creation error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
