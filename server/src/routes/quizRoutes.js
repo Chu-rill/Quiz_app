@@ -1,6 +1,6 @@
 const express = require("express");
 const quizRoutes = express.Router();
-const { protect } = require("../middleWare/middleware");
+const { protect } = require("../middleWare/jwt");
 const {
   create,
   getQuizzes,

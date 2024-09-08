@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid"); // Import the UUID function
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
+  leaderboardEntries: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Leaderboard" },
+  ],
+  profilePicture: {
+    type: String,
+    default: "", // URL to the profile picture
+  },
   // userId: {
   //   type: String,
   //   default: uuidv4, // Generates a random UUID for each user
