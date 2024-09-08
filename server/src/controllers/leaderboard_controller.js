@@ -1,4 +1,4 @@
-const Leaderboard = require("../models/leaderboardModel");
+const Leaderboard = require("../models/leaderboard_model");
 
 exports.submitQuiz = async (req, res) => {
   try {

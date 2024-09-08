@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const authRoutes = require("./src/routes/authRoutes");
-const quizRoutes = require("./src/routes/quizRoutes");
-const leaderboardRoutes = require("./src/routes/leaderboardRoutes");
+const authRoutes = require("./src/routes/auth_routes");
+const quizRoutes = require("./src/routes/quiz_routes");
+const leaderboardRoutes = require("./src/routes/leaderboard_routes");
 const dotenv = require("dotenv").config();
 const { connectDB } = require("./src/utils/db");
 const rateLimit = require("express-rate-limit");

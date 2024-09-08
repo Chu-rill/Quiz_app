@@ -6,7 +6,7 @@ const {
   getQuizzes,
   getSingleQuiz,
   getQuizzesByCategory,
-} = require("../controllers/quizController");
+} = require("../controllers/quiz_controller");
 quizRoutes.post("/create", protect, create);
 quizRoutes.get("/getquizzes", protect, getQuizzes);
 quizRoutes.get("/getsinglequiz/:id", protect, getSingleQuiz);

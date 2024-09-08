@@ -1,6 +1,5 @@
-const User = require("../models/userModel");
+const User = require("../models/user_model");
 const getRandomUrl = require("../models/profileImages");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { comparePassword, encrypt } = require("../utils/encryption");
 
