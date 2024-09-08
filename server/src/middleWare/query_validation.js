@@ -33,3 +33,8 @@ exports.create_quiz_validator = joi.object({
     .min(1)
     .required(),
 });
+exports.submit_score_validator = joi.object({
+  userId: joi.object().required(),
+  category: joi.string().required(),
+  score: joi.number().required(),
+});

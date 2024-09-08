@@ -6,7 +6,7 @@ exports.login = async (req, res) => {
 
     const response = await login_user(user_details);
 
-    res.status(200).json(response);
+    res.send(response);
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Internal server error" });

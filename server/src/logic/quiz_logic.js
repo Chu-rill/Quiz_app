@@ -7,6 +7,7 @@ const Quiz = require("../models/quiz_model");
 const { create_quiz_validator } = require("../middleWare/query_validation"); // Import the Joi schema
 
 const create_quiz = async (quiz_detail) => {
+  //validate user data
   const { error } = create_quiz_validator.validate(quiz_detail);
   if (error) {
     return handleValidationError(error);
