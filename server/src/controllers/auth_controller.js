@@ -1,29 +1,13 @@
-const User = require("../models/user_model");
-const getRandomUrl = require("../models/profileImages");
-const jwt = require("jsonwebtoken");
+const login_user = require("../logic/auth_logic");
 const { comparePassword, encrypt } = require("../utils/encryption");
-
+// const getRandomUrl = require("../models/profileImages");
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Username and password are required" });
-    }
+    const user_details = req.body;
 
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid Username or Password" });
-    }
+    const response = await login_user(user_details);
 
-    const isPasswordCorrect = await comparePassword(password, user.password);
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid Username or Password" });
-    }
-
-    const token = jwt.sign({ username, id: user._id }, process.env.JWT_SECRET);
-    res.json({ id: user._id, username, token });
+    res.status(200).json(response);
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Internal server error" });
