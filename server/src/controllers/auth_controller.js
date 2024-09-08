@@ -1,6 +1,5 @@
-const login_user = require("../logic/auth_logic");
-const { comparePassword, encrypt } = require("../utils/encryption");
-// const getRandomUrl = require("../models/profileImages");
+const { login_user, register_user } = require("../logic/auth_logic");
+//
 exports.login = async (req, res) => {
   try {
     const user_details = req.body;
@@ -16,24 +15,11 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Username and password are required" });
-    }
-    // Hash the password
-    const hashedPassword = await encrypt(password);
+    const user_details = req.body;
 
-    // Get a random profile picture URL
-    const profilePicture = await getRandomUrl();
+    const response = await register_user(user_details);
 
-    const user = await User.create({
-      username,
-      password: hashedPassword,
-      profilePicture: profilePicture || "",
-    });
-    res.status(201).send(user);
+    res.status(201).send(response);
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Internal server error" });

@@ -1,10 +1,12 @@
 const User = require("../models/user_model");
+const getRandomUrl = require("../models/profileImages");
 const jwt = require("jsonwebtoken");
-const { comparePassword } = require("../utils/encryption");
+const { comparePassword, encrypt } = require("../utils/encryption");
 const {
   passwordMismatchError,
   userNotExistError,
   defaultError,
+  noDuplicateUserError,
 } = require("../error/error");
 
 const login_user = async (user_details) => {
@@ -50,4 +52,48 @@ const login_user = async (user_details) => {
   }
 };
 
-module.exports = login_user;
+const register_user = async (user_details) => {
+  let { username, password } = user_details;
+  try {
+    let user = await User.findOne({ username });
+
+    //if there is a user associated we return an error
+    if (user) return noDuplicateUserError;
+
+    // Hash the password
+    const hashedPassword = await encrypt(password);
+
+    // Get a random profile picture URL
+    const profilePicture = await getRandomUrl();
+
+    user = await User.create({
+      username,
+      password: hashedPassword,
+      profilePicture: profilePicture || "",
+    });
+
+    return {
+      status: "success",
+      error: false,
+      statusCode: 200,
+      user: {
+        username,
+        profilePicture,
+      },
+    };
+  } catch (error) {
+    console.log(err);
+    if (err.name === "ValidationError" && err.errors) {
+      return handleValidationError(err);
+    }
+
+    // fallback error object
+    return {
+      ...defaultError,
+      err_name_d: err.toString(),
+      enr: process.env.MONGODB_URI || "grg",
+    };
+  }
+};
+
+module.exports = { login_user, register_user };
