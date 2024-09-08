@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const { comparePassword, encrypt } = require("../utils/encryption");
 const {
   passwordMismatchError,
-  userNotExistError,
+  doesNotExistError,
   defaultError,
-  noDuplicateUserError,
+  noDuplicateError,
 } = require("../error/error");
 
 const login_user = async (user_details) => {
@@ -16,7 +16,7 @@ const login_user = async (user_details) => {
     const user = await User.findOne({ username });
 
     // If user not found, send an error response
-    if (!user) return userNotExistError;
+    if (!user) return doesNotExistError;
 
     //the we fetch and compare passwords with bcrypt
     const user_hashed_password = user.password;
@@ -48,6 +48,7 @@ const login_user = async (user_details) => {
     };
   } catch (error) {
     //we return a default error
+    console.log(error);
     return defaultError(error);
   }
 };
@@ -58,7 +59,7 @@ const register_user = async (user_details) => {
     let user = await User.findOne({ username });
 
     //if there is a user associated we return an error
-    if (user) return noDuplicateUserError;
+    if (user) return noDuplicateError;
 
     // Hash the password
     const hashedPassword = await encrypt(password);
@@ -82,15 +83,15 @@ const register_user = async (user_details) => {
       },
     };
   } catch (error) {
-    console.log(err);
-    if (err.name === "ValidationError" && err.errors) {
-      return handleValidationError(err);
+    console.log(error);
+    if (error.name === "ValidationError" && error.errors) {
+      return handleValidationError(error);
     }
 
     // fallback error object
     return {
       ...defaultError,
-      err_name_d: err.toString(),
+      err_name_d: error.toString(),
       enr: process.env.MONGODB_URI || "grg",
     };
   }

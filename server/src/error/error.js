@@ -1,8 +1,8 @@
 module.exports = {
-  noDuplicateUserError: {
+  noDuplicateError: {
     status: "error",
     error: true,
-    message: "User already exists",
+    message: "already exists",
     statusCode: 400,
   },
 
@@ -20,11 +20,28 @@ module.exports = {
     };
   },
 
-  userNotExistError: {
+  // handleValidationError: (err) => {
+  //   // Ensure the errors object exists
+  //   const errors = err.errors || {}; // Default to an empty object if not defined
+
+  //   // Get the error fields from the errors object
+  //   const error_fields = Object.keys(errors);
+  //   console.log("Errors:", errors); // Log the actual errors
+
+  //   return {
+  //     status: "error",
+  //     error: true,
+  //     message: "Invalid Fields",
+  //     fields: error_fields,
+  //     statusCode: 400,
+  //   };
+  // },
+
+  doesNotExistError: {
     status: "error",
     error: true,
     statusCode: 400,
-    message: "User does not exist",
+    message: "does not exist",
   },
 
   passwordMismatchError: {
