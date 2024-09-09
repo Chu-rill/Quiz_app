@@ -76,7 +76,7 @@ const register_user = async (user_details) => {
     return {
       status: "success",
       error: false,
-      statusCode: 200,
+      statusCode: 201,
       user: {
         username,
         profilePicture,
@@ -96,5 +96,23 @@ const register_user = async (user_details) => {
     };
   }
 };
+const delete_user = async (userId) => {
+  try {
+    // Find and delete the user
+    let user = await User.findByIdAndDelete(userId);
 
-module.exports = { login_user, register_user };
+    if (!user) return doesNotExistError;
+
+    return {
+      status: "success",
+      error: false,
+      statusCode: 200,
+      message: "User deleted successfully",
+    };
+  } catch (error) {
+    console.log(error);
+    //we return a default error
+    return defaultError;
+  }
+};
+module.exports = { login_user, register_user, delete_user };

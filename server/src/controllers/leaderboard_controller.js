@@ -8,7 +8,7 @@ exports.submitScore = async (req, res) => {
     // Update or create the leaderboard entry
     const response = await submit_score(userId, category, score, quizId);
 
-    res.send(response);
+    res.status(response.statusCode).send(response);
     // res.status(200).json({ message: "Score updated", leaderboard });
   } catch (error) {
     console.error("Error updating leaderboard:", error);
@@ -19,7 +19,7 @@ exports.submitScore = async (req, res) => {
 exports.getAllScore = async (req, res) => {
   try {
     const response = await get_scores();
-    res.send(response);
+    res.status(response.statusCode).send(response);
   } catch (error) {
     console.error("Error updating leaderboard:", error);
     res.status(500).json({ message: "Internal server error" });

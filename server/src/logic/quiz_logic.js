@@ -2,6 +2,7 @@ const {
   noDuplicateError,
   defaultError,
   handleValidationError,
+  doesNotExistError,
 } = require("../error/error");
 const Quiz = require("../models/quiz_model");
 const {
@@ -51,6 +52,8 @@ const getAllQuizzes = async (quiz_detail) => {
   try {
     const quizzes = await Quiz.find();
 
+    if (!quizzes) return doesNotExistError;
+
     return {
       status: "success",
       error: false,
@@ -67,6 +70,9 @@ const getQuiz = async (quiz_id) => {
   let { id } = quiz_id;
   try {
     const quiz = await Quiz.findById(id);
+
+    if (!quiz) return doesNotExistError;
+
     return {
       status: "success",
       error: false,
@@ -99,14 +105,16 @@ const getAllQuizzesByCategory = async (category) => {
     let quizzes = await Quiz.find({ category: category });
 
     // If no quizzes are found in the specified category, return an appropriate message
-    if (!quizzes || quizzes.length === 0) {
-      return {
-        status: "error",
-        error: true,
-        message: `No quizzes found in the ${category} category.`,
-        statusCode: 404,
-      };
-    }
+    // if (!quizzes || quizzes.length === 0) {
+    //   return {
+    //     status: "error",
+    //     error: true,
+    //     message: `No quizzes found in the ${category} category.`,
+    //     statusCode: 404,
+    //   };
+    // }
+
+    if (!quizzes) return doesNotExistError;
 
     return {
       status: "success",
@@ -150,6 +158,25 @@ const getAllQuizzesByLevel = async (level) => {
     return defaultError;
   }
 };
+const deleteQuiz = async (quizId) => {
+  try {
+    // Find and delete the user
+    let quiz = await Quiz.findByIdAndDelete(quizId);
+
+    if (!quiz) return doesNotExistError;
+
+    return {
+      status: "success",
+      error: false,
+      statusCode: 200,
+      message: "Quiz deleted successfully",
+    };
+  } catch (error) {
+    console.log(error);
+    //we return a default error
+    return defaultError;
+  }
+};
 
 module.exports = {
   create_quiz,
@@ -157,4 +184,5 @@ module.exports = {
   getQuiz,
   getAllQuizzesByCategory,
   getAllQuizzesByLevel,
+  deleteQuiz,
 };
