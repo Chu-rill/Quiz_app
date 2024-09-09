@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./context/AuthContext";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
+import Home from "./pages/home/Home";
 function App() {
   const { authUser } = useAuthContext();
   return (
@@ -20,10 +21,10 @@ function App() {
           path="/signup"
           element={authUser ? <Navigate to="/" /> : <Signup />}
         />
-        <Route
+        {/* <Route
           path="/profile"
           element={!authUser ? <Navigate to="/" /> : <Profile />}
-        />
+        /> */}
       </Routes>
     </div>
   );

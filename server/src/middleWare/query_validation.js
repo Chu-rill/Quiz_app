@@ -1,3 +1,4 @@
+const Joi = require("joi");
 const joi = require("joi");
 
 exports.register_query_validator = joi.object({
