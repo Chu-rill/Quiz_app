@@ -4,7 +4,11 @@ const {
   handleValidationError,
 } = require("../error/error");
 const Quiz = require("../models/quiz_model");
-const { create_quiz_validator } = require("../middleWare/query_validation"); // Import the Joi schema
+const {
+  create_quiz_validator,
+  quizzes_byLevel_validator,
+  quizzes_byCategory_validator,
+} = require("../middleWare/query_validation"); // Import the Joi schema
 
 const create_quiz = async (quiz_detail) => {
   //validate user data
@@ -12,7 +16,7 @@ const create_quiz = async (quiz_detail) => {
   if (error) {
     return handleValidationError(error);
   }
-  let { title, category, questions } = quiz_detail;
+  let { title, category, level, questions } = quiz_detail;
   try {
     const existingQuiz = await Quiz.findOne({ title });
 
@@ -23,6 +27,7 @@ const create_quiz = async (quiz_detail) => {
     const quiz = await Quiz.create({
       title,
       category,
+      level,
       questions,
     });
 
@@ -75,16 +80,20 @@ const getQuiz = async (quiz_id) => {
 };
 
 const getAllQuizzesByCategory = async (category) => {
-  if (!category) {
-    return {
-      status: "error",
-      error: true,
-      message: "Category is required.",
-      statusCode: 400,
-    };
+  // if (!category) {
+  //   return {
+  //     status: "error",
+  //     error: true,
+  //     message: "Category is required.",
+  //     statusCode: 400,
+  //   };
+  // }
+
+  const { error } = quizzes_byCategory_validator.validate({ category });
+  if (error) {
+    return handleValidationError(error);
   }
 
-  //   let quizzes = category;
   try {
     // Find quizzes by category
     let quizzes = await Quiz.find({ category: category });
@@ -110,9 +119,42 @@ const getAllQuizzesByCategory = async (category) => {
     return defaultError;
   }
 };
+
+const getAllQuizzesByLevel = async (level) => {
+  const { error } = quizzes_byLevel_validator.validate({ level });
+  if (error) {
+    return handleValidationError(error);
+  }
+  try {
+    // Find quizzes by level
+    let quizzes = await Quiz.find({ level: level });
+
+    // If no quizzes are found in the specified category, return an appropriate message
+    if (!level || level.length === 0) {
+      return {
+        status: "error",
+        error: true,
+        message: `No quizzes found in the ${level} level.`,
+        statusCode: 404,
+      };
+    }
+
+    return {
+      status: "success",
+      error: false,
+      statusCode: 200,
+      quizzes,
+    };
+  } catch (error) {
+    console.log(error);
+    return defaultError;
+  }
+};
+
 module.exports = {
   create_quiz,
   getAllQuizzes,
   getQuiz,
   getAllQuizzesByCategory,
+  getAllQuizzesByLevel,
 };

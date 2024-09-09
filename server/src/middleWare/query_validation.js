@@ -13,6 +13,7 @@ exports.login_query_validator = joi.object({
 exports.create_quiz_validator = joi.object({
   title: joi.string().required(),
   category: joi.string().required(),
+  level: joi.string().required(),
   questions: joi
     .array()
     .items(
@@ -37,4 +38,11 @@ exports.submit_score_validator = joi.object({
   userId: joi.object().required(),
   category: joi.string().required(),
   score: joi.number().required(),
+  quizId: joi.string().required(),
+});
+exports.quizzes_byCategory_validator = joi.object({
+  category: joi.string().required(),
+});
+exports.quizzes_byLevel_validator = joi.object({
+  level: joi.string().required(),
 });

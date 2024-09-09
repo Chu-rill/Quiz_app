@@ -3,6 +3,7 @@ const {
   getAllQuizzes,
   getQuiz,
   getAllQuizzesByCategory,
+  getAllQuizzesByLevel,
 } = require("../logic/quiz_logic");
 
 exports.create = async (req, res) => {
@@ -41,6 +42,16 @@ exports.getQuizzesByCategory = async (req, res) => {
   try {
     const category = req.query.category; // Get the category from the query string
     const response = await getAllQuizzesByCategory(category);
+    res.send(response);
+  } catch (error) {
+    console.error("Error fetching quizzes by category:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+exports.getQuizzesByLevel = async (req, res) => {
+  try {
+    const level = req.query.level; // Get the category from the query string
+    const response = await getAllQuizzesByLevel(level);
     res.send(response);
   } catch (error) {
     console.error("Error fetching quizzes by category:", error);

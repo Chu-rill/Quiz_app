@@ -22,6 +22,7 @@ function optionsLimit(val) {
 const QuizSchema = new mongoose.Schema({
   title: { type: String, required: true }, // Quiz title
   category: { type: String, required: true }, // Category of the quiz
+  level: { type: String, required: true }, // level of difficulty of the quiz
   questions: { type: [QuestionSchema], required: true }, // Array of questions
 });
 

@@ -9,13 +9,24 @@ const LeaderboardSchema = new mongoose.Schema({
       highScore: { type: Number, default: 0 }, // High score for the specific category
     },
   ],
+  quizScores: [
+    {
+      quizId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Quiz",
+        required: true,
+      }, // Reference to the quiz
+      score: { type: Number, default: 0 }, // High score for the specific quiz
+    },
+  ],
 });
 
 // Static method to update or create leaderboard entry
 LeaderboardSchema.statics.updateScore = async function (
   userId,
   category,
-  score
+  score,
+  quizId
 ) {
   let leaderboard = await this.findOne({ user: userId });
 
@@ -25,26 +36,36 @@ LeaderboardSchema.statics.updateScore = async function (
       user: userId,
       generalHighScore: score,
       categoryScores: [{ category, highScore: score }],
+      quizScores: [{ quizId, score }], // Initialize with quiz score
     });
   } else {
-    // Update general high score if the new score is higher
-    // if (score > leaderboard.generalHighScore) {
-    //   leaderboard.generalHighScore = score;
-    // }
-    leaderboard.generalHighScore = leaderboard.generalHighScore + score;
+    // Update general high score
+    leaderboard.generalHighScore += score;
 
     // Check if a score exists for the category
     const categoryScore = leaderboard.categoryScores.find(
       (cs) => cs.category === category
     );
     if (categoryScore) {
-      // Update category high score if the new score is higher
       if (score > categoryScore.highScore) {
         categoryScore.highScore = score;
       }
     } else {
-      // Add a new category score if not already present
       leaderboard.categoryScores.push({ category, highScore: score });
+    }
+
+    // Check for quiz scores
+    const quizScore = leaderboard.quizScores.find(
+      (qs) => qs.quizId.toString() === quizId.toString()
+    );
+    if (quizScore) {
+      // Update quiz high score if the new score is higher
+      if (score > quizScore.score) {
+        quizScore.score = score;
+      }
+    } else {
+      // Add a new quiz score if not already present
+      leaderboard.quizScores.push({ quizId, score });
     }
   }
 
