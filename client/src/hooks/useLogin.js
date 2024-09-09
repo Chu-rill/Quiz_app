@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { storeToken } from "../jwt";
-import { liveLink, localLink, localLink2 } from "./api";
+import { storeToken } from "../utils/jwt";
+import { api } from "../utils/api";
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
@@ -12,7 +12,7 @@ const useLogin = () => {
     if (!success) return;
     setLoading(true);
     try {
-      const res = await fetch(`${liveLink}/api/auth/login`, {
+      const res = await fetch(`${api}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -27,7 +27,7 @@ const useLogin = () => {
 
       // Store token in session storage
       storeToken(token);
-      localStorage.setItem("user", JSON.stringify(data));
+      // localStorage.setItem("user", JSON.stringify(data));
       setauthUser(data);
       toast.success("Login Succesful");
     } catch (error) {

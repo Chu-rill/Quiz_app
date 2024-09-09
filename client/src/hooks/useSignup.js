@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast"; // Make sure to install and import toast
 import { useAuthContext } from "../context/AuthContext";
-import { storeToken } from "../jwt";
-import { liveLink, localLink, localLink2 } from "./api";
+import { storeToken } from "../utils/jwt";
+import { api } from "../utils/api";
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
 
-  const signup = async ({ username, email, password }) => {
-    const success = handleInputErrors({ username, email, password });
+  const signup = async ({ username, password }) => {
+    const success = handleInputErrors({ username, password });
     if (!success) return;
 
     setLoading(true);
     try {
-      const res = await fetch(`${liveLink}/api/auth/signup`, {
+      const res = await fetch(`${api}/api/v1/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
@@ -29,9 +29,6 @@ const useSignup = () => {
 
         // Store the token in session storage or local storage
         storeToken(token);
-
-        // Add user data to local storage
-        localStorage.setItem("user", JSON.stringify(data));
 
         // Set user data in context
         setauthUser(data);
@@ -53,8 +50,8 @@ const useSignup = () => {
 
 export default useSignup;
 
-function handleInputErrors({ username, email, password }) {
-  if (!username || !email || !password) {
+function handleInputErrors({ username, password }) {
+  if (!username || !password) {
     toast.error("Please fill all fields");
     return false;
   }

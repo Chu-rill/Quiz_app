@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
-import { getToken } from "../jwt";
-import { liveLink, localLink, localLink2 } from "./api";
+import { getToken } from "../utils/jwt";
+import { api } from "../utils/api";
 const useEdit = () => {
   const [loading, setLoading] = useState(false);
   const { authUser, setAuthUser } = useAuthContext();
@@ -16,7 +16,7 @@ const useEdit = () => {
     setLoading(true);
     //text
     try {
-      const res = await fetch(`${liveLink}/api/users/update/${authUser._id}`, {
+      const res = await fetch(`${api}/api/users/update/${authUser._id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

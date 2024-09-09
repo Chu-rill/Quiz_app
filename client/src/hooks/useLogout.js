@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { getToken } from "../jwt";
-import { liveLink, localLink, localLink2 } from "./api";
+import { api } from "../utils/api";
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
@@ -9,7 +9,7 @@ const useLogout = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${liveLink}/api/auth/logout`, {
+      const res = await fetch(`${api}/api/auth/logout`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,6 +1,6 @@
 import { getToken } from "../jwt";
 import { useState } from "react";
-import { liveLink, localLink, localLink2 } from "./api";
+import { api } from "../utils/api";
 const useDeleteUser = () => {
   const [loading, setLoading] = useState(false);
   const deleteUser = async (userId) => {
@@ -8,7 +8,7 @@ const useDeleteUser = () => {
     try {
       const token = getToken(); // Ensure you have a function to get the token
 
-      const res = await fetch(`${liveLink}/api/users/delete/${userId}`, {
+      const res = await fetch(`${api}/api/users/delete/${userId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

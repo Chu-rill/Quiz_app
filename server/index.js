@@ -10,7 +10,7 @@ const rateLimit = require("express-rate-limit");
 const port = process.env.PORT;
 app.use(
   cors({
-    origin: ["http://127.0.0.1:3000", "http://localhost:5173/"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     allowedHeaders: [
       "Origin",
