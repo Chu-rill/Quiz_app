@@ -37,16 +37,6 @@ const Home = () => {
     setFilteredQuizzes(updatedQuizzes);
   }, [quizzes, filterCategory, filterLevel]);
 
-  // Filter by category
-  const handleFilterCategory = (category) => {
-    setFilterCategory(category);
-  };
-
-  // Filter by level
-  const handleFilterLevel = (level) => {
-    setFilterLevel(level);
-  };
-
   // Handle quiz selection
   const handleSelectQuiz = (quizId) => {
     setSelectedQuizzes((prev) =>
@@ -57,10 +47,10 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-[500px] mx-auto">
+    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
         <h1 className="text-3xl font-bold mb-4 text-center">
-          Select a Quiz to start
+          Select a Quiz to Start
         </h1>
 
         {loading ? (
@@ -70,63 +60,91 @@ const Home = () => {
           </div>
         ) : (
           <div>
-            {/* Category Filter */}
-            <div className="mb-4">
-              <h3 className="font-bold mb-2">Filter by Category</h3>
-              {uniqueCategories.map((category, idx) => (
-                <button
-                  key={idx}
-                  className={`btn btn-primary w-full mb-2 ${
-                    filterCategory === category ? "active" : ""
-                  }`}
-                  onClick={() => handleFilterCategory(category)}
+            {/* Dropdown Filters */}
+            <div className="mb-4 flex space-x-4">
+              {/* Category Filter Dropdown */}
+              <div>
+                <label className="block font-bold mb-2">
+                  Filter by Category
+                </label>
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="select select-bordered w-full"
                 >
-                  {category}
-                </button>
-              ))}
+                  <option value="">All Categories</option>
+                  {uniqueCategories.map((category, idx) => (
+                    <option key={idx} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Level Filter Dropdown */}
+              <div>
+                <label className="block font-bold mb-2">Filter by Level</label>
+                <select
+                  value={filterLevel}
+                  onChange={(e) => setFilterLevel(e.target.value)}
+                  className="select select-bordered w-full"
+                >
+                  <option value="">All Levels</option>
+                  {uniqueLevels.map((level, idx) => (
+                    <option key={idx} value={level}>
+                      {level}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Level Filter */}
-            <div className="mb-4">
-              <h3 className="font-bold mb-2">Filter by Level</h3>
-              {uniqueLevels.map((level, idx) => (
-                <button
-                  key={idx}
-                  className={`btn btn-secondary w-full mb-2 ${
-                    filterLevel === level ? "active" : ""
-                  }`}
-                  onClick={() => handleFilterLevel(level)}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-
-            {/* Quiz List */}
-            <ul className="quiz-list mb-4">
+            {/* Quiz Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {filteredQuizzes.length > 0 ? (
                 filteredQuizzes.map((quiz) => (
-                  <li key={quiz._id} className="mb-2">
-                    <label className="flex items-center space-x-3">
+                  <div
+                    key={quiz._id}
+                    className={`card bg-base-100 shadow-xl p-4 ${
+                      selectedQuizzes.includes(quiz._id)
+                        ? "border-2 border-blue-500"
+                        : ""
+                    }`}
+                    onClick={() => handleSelectQuiz(quiz._id)}
+                  >
+                    <h2 className="card-title text-lg font-bold mb-2">
+                      {quiz.title}
+                    </h2>
+                    <p className="mb-2">
+                      <strong>Category:</strong> {quiz.category}
+                    </p>
+                    <p className="mb-2">
+                      <strong>Level:</strong> {quiz.level}
+                    </p>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-gray-600">
+                        {quiz.questions.length} questions
+                      </span>
                       <input
                         type="checkbox"
                         className="checkbox"
                         checked={selectedQuizzes.includes(quiz._id)}
-                        onChange={() => handleSelectQuiz(quiz._id)}
+                        readOnly
                       />
-                      <span className="text-lg">{quiz.title}</span>
-                    </label>
-                  </li>
+                    </div>
+                  </div>
                 ))
               ) : (
-                <li>No quizzes found</li>
+                <div className="col-span-full">
+                  <p>No quizzes found</p>
+                </div>
               )}
-            </ul>
+            </div>
 
             {/* Start Quiz Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn btn-primary w-full mt-6"
               disabled={selectedQuizzes.length === 0}
             >
               Start Selected Quizzes
