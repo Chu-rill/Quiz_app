@@ -10,3 +10,13 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+/* Hide scrollbar but keep scrolling */
+.container {
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}

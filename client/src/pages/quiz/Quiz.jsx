@@ -14,7 +14,8 @@ const Quiz = () => {
   const { selectedQuizzes } = location.state || {};
   const navigate = useNavigate();
 
-  const { loading, quiz } = useGetQuiz(selectedQuizzes);
+  const quizId = selectedQuizzes.toString();
+  const { loading, quiz } = useGetQuiz(quizId);
   const { loadingSub, submitScore } = useSubmit();
 
   const questions = quiz?.quiz?.questions || [];
@@ -49,7 +50,7 @@ const Quiz = () => {
   };
 
   const handleSubmit = async (e) => {
-    await submitScore(score, category, selectedQuizzes);
+    await submitScore(score, category, quizId);
     navigate("/");
   };
   if (loading) {
