@@ -67,12 +67,14 @@ const Home = () => {
         </h1>
         <div className=" flex justify-between items-center">
           <Link
-            to="/signup"
+            to="/leader"
             className=" underline text-xl mt-2 inline-block mb-2 ml-3 hover:text-blue-600 "
           >
             View Leader-Board
           </Link>
-          <button className="btn btn-accent">Create Quiz</button>
+          <Link to="/leader">
+            <button className="btn btn-accent">Create Quiz</button>
+          </Link>
         </div>
 
         {loading ? (
