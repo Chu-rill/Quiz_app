@@ -3,9 +3,22 @@ import { useAuthContext } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { storeToken } from "../utils/jwt";
 import { api } from "../utils/api";
+
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
+
+  // Helper function to store token with expiration
+  const storeTokenWithExpiration = (token, data) => {
+    const expirationTime = new Date().getTime() + 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+    const userData = { ...data, expirationTime };
+
+    sessionStorage.setItem("user", JSON.stringify(userData)); // Store user data with expiration
+    storeToken(token); // Store token separately if needed
+    setauthUser(userData); // Update context with user data
+    console.log("Auth user set:", userData);
+  };
+
   const login = async (username, password) => {
     const success = handleInputErrors(username, password);
 
@@ -18,26 +31,26 @@ const useLogin = () => {
         body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
-      // console.log(data);
+
       if (data.message) {
         throw new Error(data.message);
       }
       const token = data.token;
-      // console.log("token:" + token);
 
-      // Store token in session storage
-      storeToken(token);
-      // localStorage.setItem("user", JSON.stringify(data));
-      setauthUser(data);
-      toast.success("Login Succesful");
+      // Use the function to store the token with expiration time
+      storeTokenWithExpiration(token, data);
+
+      toast.success("Login Successful");
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+
   return { loading, login };
 };
+
 export default useLogin;
 
 function handleInputErrors(username, password) {

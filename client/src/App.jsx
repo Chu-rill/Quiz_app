@@ -5,10 +5,12 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Home from "./pages/home/Home";
 import Quiz from "./pages/quiz/Quiz";
+
 function App() {
   const { authUser } = useAuthContext();
+
   return (
-    <div className=" p-4 h-screen flex items-center justify-center ">
+    <div className="p-4 h-screen flex items-center justify-center">
       <Routes>
         <Route
           path="/"
@@ -20,7 +22,7 @@ function App() {
         />
         <Route
           path="/quiz"
-          element={authUser ? <Navigate to="/" /> : <Quiz />}
+          element={authUser ? <Quiz /> : <Navigate to="/login" />} // Allow authenticated users to access Quiz
         />
         <Route
           path="/signup"

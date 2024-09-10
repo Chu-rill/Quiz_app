@@ -1,5 +1,5 @@
-import { Children, createContext, useContext, useState } from "react";
-
+import { createContext, useContext, useState, useEffect } from "react";
+import getAuthUser from "../utils/getAuthUser";
 export const AuthContext = createContext();
 
 export const useAuthContext = () => {
@@ -7,9 +7,7 @@ export const useAuthContext = () => {
 };
 
 export const AuthContextProvider = ({ children }) => {
-  const [authUser, setauthUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+  const [authUser, setauthUser] = useState(() => getAuthUser());
 
   return (
     <AuthContext.Provider value={{ authUser, setauthUser }}>

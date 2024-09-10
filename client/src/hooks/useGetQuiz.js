@@ -81,7 +81,7 @@ const useGetQuiz = (quizId) => {
     getQuiz(); // Call getQuiz when quizId or token changes
   }, [quizId, token]);
 
-  return { loading, quiz, getQuiz }; // Return getQuiz
+  return { loading, quiz }; // Return getQuiz
 };
 
 export default useGetQuiz;

@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import useGetQuiz from "../../hooks/useGetQuiz";
-
+import { useAuthContext } from "../../context/AuthContext";
+import useSubmit from "../../hooks/useSubmit";
+import { useNavigate } from "react-router-dom";
 const Quiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const { authUser } = useAuthContext();
+  const navigate = useNavigate();
+  console.log(`inside quiz: ${authUser.user.id}`);
   const quizId = "66ddeb506a3ee0943dfff4f4";
   const { loading, quiz } = useGetQuiz(quizId);
+  const { loadingSub, submitScore } = useSubmit();
 
   const questions = quiz?.quiz?.questions || [];
   const title = quiz?.quiz?.title || "Quiz";
+  const category = quiz?.quiz?.category || "Uncategorized"; // Provide fallback if category is empty
+  console.log(`category: ${category}`);
 
   // Update the function to get the correct answer value
   const handleAnswerClick = (isCorrect, index) => {
-    console.log(`Selected option isCorrect: ${isCorrect}`); // Log the isCorrect value
+    // console.log(`Selected option isCorrect: ${isCorrect}`); // Log the isCorrect value
     setSelectedAnswerIndex(index);
     setIsAnswered(true);
     if (isCorrect) {
@@ -41,6 +49,11 @@ const Quiz = () => {
     setShowResults(false);
   };
 
+  const handleSubmit = async (e) => {
+    // console.log({ score, category, quizId });
+    await submitScore(score, category, quizId);
+    navigate("/");
+  };
   if (loading) {
     return (
       <div>
@@ -54,15 +67,17 @@ const Quiz = () => {
     return (
       <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
         <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-          <h1>{title}</h1>
-          <p>
+          <h1 className=" text-center text-3xl  mb-2">{title}</h1>
+          <p className=" text-center text-2xl mb-3 text-green-600">
             Your score: {score}/{questions.length}
           </p>
           <div className=" flex justify-between items-center p-3">
             <button className="btn btn-secondary" onClick={restartQuiz}>
               Play Again
             </button>
-            <button className="btn btn-accent">Submit</button>
+            <button className="btn btn-accent" onClick={handleSubmit}>
+              Submit
+            </button>
           </div>
         </div>
       </div>

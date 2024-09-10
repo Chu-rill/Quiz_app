@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useGetQuizzes from "../../hooks/useGetQuizzes";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Home = () => {
   const { loading, quizzes } = useGetQuizzes();
@@ -8,6 +9,7 @@ const Home = () => {
   const [selectedQuizzes, setSelectedQuizzes] = useState([]);
   const [filterCategory, setFilterCategory] = useState("");
   const [filterLevel, setFilterLevel] = useState("");
+  const { authUser } = useAuthContext();
   const navigate = useNavigate(); // Initialize navigate
 
   let quizArrays = quizzes.quizzes || [];
@@ -54,14 +56,13 @@ const Home = () => {
     // const quizId = selectedQuizzes[0]; // Assume starting the first selected quiz
     navigate("/quiz"); // Redirect to quiz page with quizId
   };
-
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
         <h1 className="text-3xl font-bold mb-4 text-center">
           Select a Quiz to Start
         </h1>
-
+        <p>welcome {authUser.user.username}</p>
         {loading ? (
           <div>
             <p>Loading quizzes...</p>
