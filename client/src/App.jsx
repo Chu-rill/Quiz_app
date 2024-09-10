@@ -4,6 +4,7 @@ import { useAuthContext } from "./context/AuthContext";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Home from "./pages/home/Home";
+import Quiz from "./pages/quiz/Quiz";
 function App() {
   const { authUser } = useAuthContext();
   return (
@@ -16,6 +17,10 @@ function App() {
         <Route
           path="/login"
           element={authUser ? <Navigate to="/" /> : <Login />}
+        />
+        <Route
+          path="/quiz"
+          element={authUser ? <Navigate to="/" /> : <Quiz />}
         />
         <Route
           path="/signup"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useGetQuizzes from "../../hooks/useGetQuizzes";
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
   const [selectedQuizzes, setSelectedQuizzes] = useState([]);
   const [filterCategory, setFilterCategory] = useState("");
   const [filterLevel, setFilterLevel] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   let quizArrays = quizzes.quizzes || [];
 
@@ -44,6 +46,13 @@ const Home = () => {
         ? prev.filter((id) => id !== quizId)
         : [...prev, quizId]
     );
+  };
+
+  // Handle starting quiz and navigation
+  const handleStartQuiz = () => {
+    // if (selectedQuizzes.length === 0) return;
+    // const quizId = selectedQuizzes[0]; // Assume starting the first selected quiz
+    navigate("/quiz"); // Redirect to quiz page with quizId
   };
 
   return (
@@ -146,6 +155,7 @@ const Home = () => {
               type="submit"
               className="btn btn-primary w-full mt-6"
               disabled={selectedQuizzes.length === 0}
+              onClick={handleStartQuiz} // Start the quiz when clicked
             >
               Start Selected Quizzes
             </button>

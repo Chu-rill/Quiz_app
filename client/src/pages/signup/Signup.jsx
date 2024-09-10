@@ -26,7 +26,7 @@ export default function Signup() {
       <div className=" w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 ">
         <h1 className=" text-3xl font-semibold text-center text-gray-300 ">
           Sign Up
-          {/* <span className="ml-2 text-blue-500 ">ChatSpace</span> */}
+          <span className="ml-2 text-blue-500 ">Trivio</span>
         </h1>
 
         <form onSubmit={handleSubmit}>
@@ -74,7 +74,7 @@ export default function Signup() {
           <Link to="/login" className=" text-sm  mt-2 inline-block ">
             Already have an account?
             <span className=" text-purple-500 ml-1 hover:text-blue-600">
-              Signin
+              Login
             </span>
           </Link>
           <div>
