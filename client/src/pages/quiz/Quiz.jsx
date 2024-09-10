@@ -3,27 +3,26 @@ import useGetQuiz from "../../hooks/useGetQuiz";
 import { useAuthContext } from "../../context/AuthContext";
 import useSubmit from "../../hooks/useSubmit";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const Quiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  const { authUser } = useAuthContext();
+  const location = useLocation();
+  const { selectedQuizzes } = location.state || {};
   const navigate = useNavigate();
-  console.log(`inside quiz: ${authUser.user.id}`);
-  const quizId = "66ddeb506a3ee0943dfff4f4";
-  const { loading, quiz } = useGetQuiz(quizId);
+
+  const { loading, quiz } = useGetQuiz(selectedQuizzes);
   const { loadingSub, submitScore } = useSubmit();
 
   const questions = quiz?.quiz?.questions || [];
   const title = quiz?.quiz?.title || "Quiz";
   const category = quiz?.quiz?.category || "Uncategorized"; // Provide fallback if category is empty
-  console.log(`category: ${category}`);
 
   // Update the function to get the correct answer value
   const handleAnswerClick = (isCorrect, index) => {
-    // console.log(`Selected option isCorrect: ${isCorrect}`); // Log the isCorrect value
     setSelectedAnswerIndex(index);
     setIsAnswered(true);
     if (isCorrect) {
@@ -50,8 +49,7 @@ const Quiz = () => {
   };
 
   const handleSubmit = async (e) => {
-    // console.log({ score, category, quizId });
-    await submitScore(score, category, quizId);
+    await submitScore(score, category, selectedQuizzes);
     navigate("/");
   };
   if (loading) {
