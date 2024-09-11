@@ -99,9 +99,12 @@ const LeaderBoard = () => {
                 key={entry._id}
                 className="flex flex-col p-4 border rounded-lg bg-base-100 shadow-xl"
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-between space-x-4">
                   <p className="font-bold">
                     {userNames[entry.user] || "Unknown User"}
+                  </p>
+                  <p className="font-semibold">
+                    {entry.generalHighScore} Points
                   </p>
                 </div>
 
