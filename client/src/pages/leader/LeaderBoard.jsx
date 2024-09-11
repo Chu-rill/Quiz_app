@@ -1,63 +1,72 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-
-// const LeaderBoard = () => {
-//   return (
-//     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-//       <div className="container overflow-scroll  h-[500px] w-full p-6 rounded-3xl shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-//         <Link to="/">
-//           <p className=" underline text-purple-500">Back</p>
-//         </Link>
-//         <h1 className=" text-center text-2xl">LeaderBoard </h1>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LeaderBoard;
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import useLeader from "../../hooks/useLeader";
+import fetchUserDetails from "../../utils/fetchUserDetails";
 
 const LeaderBoard = () => {
-  // Sample data for leaderboard
-  const leaderboardData = [
-    {
-      id: 1,
-      name: "Alice",
-      points: 100,
-      category: "Math",
-      profilePic: "https://via.placeholder.com/40",
-    },
-    {
-      id: 2,
-      name: "Bob",
-      points: 90,
-      category: "Science",
-      profilePic: "https://via.placeholder.com/40",
-    },
-    {
-      id: 3,
-      name: "Charlie",
-      points: 85,
-      category: "Math",
-      profilePic: "https://via.placeholder.com/40",
-    },
-    {
-      id: 4,
-      name: "David",
-      points: 75,
-      category: "Science",
-      profilePic: "https://via.placeholder.com/40",
-    },
-  ];
-
+  const { leaderboard, loading } = useLeader();
   const [filter, setFilter] = useState("All");
+  const [userNames, setUserNames] = useState({});
+
+  const leader = leaderboard?.score || [];
+  // console.log(leader);
+  useEffect(() => {
+    const fetchUserNames = async () => {
+      try {
+        // Fetch all user details once
+        const userData = await fetchUserDetails();
+        const data = userData.data;
+
+        // Create a mapping of userId to username
+        const names = {};
+        leader.forEach((entry) => {
+          const user = data.find((user) => user._id === entry.user);
+          if (user) {
+            names[entry.user] = user.username;
+          } else {
+            console.log(`User with ID ${entry.user} not found`);
+          }
+        });
+
+        setUserNames(names); // Set the userNames state with the mapping
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
+    };
+
+    if (leader.length > 0) {
+      fetchUserNames();
+    }
+  }, [leader]);
+
+  // Extract unique categories from leaderboard data using useMemo for optimization
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set();
+    leader.forEach((entry) => {
+      entry.categoryScores.forEach((score) => {
+        uniqueCategories.add(score.category);
+      });
+    });
+    return ["All", ...Array.from(uniqueCategories)]; // Add "All" option
+  }, [leader]);
 
   // Filter leaderboard data based on selected category
   const filteredData =
     filter === "All"
-      ? leaderboardData
-      : leaderboardData.filter((entry) => entry.category === filter);
+      ? leader
+      : leader.filter((entry) =>
+          entry.categoryScores.some((score) => score.category === filter)
+        );
+
+  // Handle loading state
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-center">Loading leaderboard...</h1>
+        <span className="loading loading-dots loading-md"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
@@ -67,50 +76,49 @@ const LeaderBoard = () => {
         </Link>
         <h1 className="text-center text-2xl mb-4">LeaderBoard</h1>
 
-        {/* Filter buttons */}
-        <div className="flex justify-center mb-4 space-x-4">
-          <button
-            className={`btn ${filter === "All" ? "btn-active" : ""}`}
-            onClick={() => setFilter("All")}
+        {/* Dropdown for category filter */}
+        <div className="flex justify-center mb-4">
+          <select
+            className="select select-bordered w-full"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
           >
-            All
-          </button>
-          <button
-            className={`btn ${filter === "Math" ? "btn-active" : ""}`}
-            onClick={() => setFilter("Math")}
-          >
-            Math
-          </button>
-          <button
-            className={`btn ${filter === "Science" ? "btn-active" : ""}`}
-            onClick={() => setFilter("Science")}
-          >
-            Science
-          </button>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Leaderboard Section */}
         <div className="grid grid-cols-1 gap-4">
           {filteredData.length > 0 ? (
-            filteredData.map((entry, index) => (
+            filteredData.map((entry) => (
               <div
-                key={entry.id}
-                className="flex items-center justify-between p-4 border border-gray-300 rounded-lg  hover:bg-gray-200 transition-colors duration-200"
+                key={entry._id}
+                className="flex flex-col p-4 border rounded-lg bg-base-100 shadow-xl"
               >
                 <div className="flex items-center space-x-4">
-                  <img
-                    src={entry.profilePic}
-                    alt={`${entry.name}'s profile`}
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <div>
-                    <p className="font-bold">{entry.name}</p>
-                    <p className="text-sm text-gray-600">
-                      Category: {entry.category}
-                    </p>
-                  </div>
+                  <p className="font-bold">
+                    {userNames[entry.user] || "Unknown User"}
+                  </p>
                 </div>
-                <p className="font-semibold">{entry.points} Points</p>
+
+                {/* Category and Score Section */}
+                <div className="flex flex-col space-y-2 mt-4">
+                  {entry.categoryScores.map((score) => (
+                    <div
+                      key={score._id}
+                      className="flex justify-between items-center"
+                    >
+                      <p className="text-sm text-gray-600">
+                        Category: {score.category}
+                      </p>
+                      <p className="font-semibold">{score.highScore} Points</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))
           ) : (

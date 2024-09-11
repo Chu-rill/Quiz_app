@@ -115,4 +115,26 @@ const delete_user = async (userId) => {
     return defaultError;
   }
 };
-module.exports = { login_user, register_user, delete_user };
+const get_all_users = async () => {
+  try {
+    // Find all users
+    let users = await User.find();
+
+    if (!users || users.length === 0)
+      return { status: "error", message: "No users found." };
+
+    return {
+      status: "success",
+      error: false,
+      statusCode: 200,
+      message: "Users retrieved successfully",
+      data: users,
+    };
+  } catch (error) {
+    console.log(error);
+    // Return a default error
+    return defaultError;
+  }
+};
+
+module.exports = { login_user, register_user, delete_user, get_all_users };

@@ -33,10 +33,7 @@ function App() {
           path="/signup"
           element={authUser ? <Navigate to="/" /> : <Signup />}
         />
-        {/* <Route
-          path="/profile"
-          element={!authUser ? <Navigate to="/" /> : <Profile />}
-        /> */}
+        <Route path="/" element={!authUser ? <Navigate to="/" /> : <Home />} />
       </Routes>
     </div>
   );

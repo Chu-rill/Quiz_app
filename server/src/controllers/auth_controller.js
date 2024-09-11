@@ -2,6 +2,7 @@ const {
   login_user,
   register_user,
   delete_user,
+  get_all_users,
 } = require("../logic/auth_logic");
 //
 exports.login = async (req, res) => {
@@ -38,6 +39,19 @@ exports.deleteUser = async (req, res) => {
     if (response.status === "success") {
       res.cookie("jwt", "", { maxAge: 0 });
     }
+
+    // Send the appropriate response to the client
+    res.status(response.statusCode).send(response);
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.getAllUsers = async (req, res) => {
+  const user_id = req.params;
+
+  try {
+    const response = await get_all_users(); // Call the get_all_users function
 
     // Send the appropriate response to the client
     res.status(response.statusCode).send(response);

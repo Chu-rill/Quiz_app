@@ -1,6 +1,6 @@
 export default function getAuthUser() {
   const userData = JSON.parse(sessionStorage.getItem("user"));
-  console.log("Fetched user data from session:", userData);
+  // console.log("Fetched user data from session:", userData);
 
   if (userData) {
     const currentTime = new Date().getTime();
@@ -19,6 +19,6 @@ export default function getAuthUser() {
     }
     return userData;
   }
-  console.log("No user data found");
+  // console.log("No user data found");
   return null;
 }
