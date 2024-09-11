@@ -24,7 +24,7 @@ const useGetQuiz = (quizId) => {
       if (!res.ok) {
         throw new Error(data.message || "Failed to fetch quiz");
       }
-      console.log("data:", JSON.stringify(data, null, 2));
+      // console.log("data:", JSON.stringify(data, null, 2));
       setQuiz(data); // Set quiz data
     } catch (error) {
       toast.error(error.message);

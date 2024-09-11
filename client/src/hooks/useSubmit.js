@@ -9,11 +9,11 @@ const useSubmit = () => {
   const submitScore = async (score, category, quizId) => {
     setLoading(true);
     // Log the payload to check what is being sent
-    console.log({
-      score,
-      category,
-      quizId,
-    });
+    // console.log({
+    //   score,
+    //   category,
+    //   quizId,
+    // });
     try {
       const response = await fetch(`${api}/api/v1/leaderboard/submitquiz`, {
         method: "POST",

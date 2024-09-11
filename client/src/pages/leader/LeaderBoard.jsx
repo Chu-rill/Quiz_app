@@ -9,15 +9,13 @@ const LeaderBoard = () => {
   const [userNames, setUserNames] = useState({});
 
   const leader = leaderboard?.score || [];
-  // console.log(leader);
+
   useEffect(() => {
     const fetchUserNames = async () => {
       try {
-        // Fetch all user details once
         const userData = await fetchUserDetails();
         const data = userData.data;
 
-        // Create a mapping of userId to username
         const names = {};
         leader.forEach((entry) => {
           const user = data.find((user) => user._id === entry.user);
@@ -28,7 +26,7 @@ const LeaderBoard = () => {
           }
         });
 
-        setUserNames(names); // Set the userNames state with the mapping
+        setUserNames(names);
       } catch (error) {
         console.error("Failed to fetch user details:", error);
       }
@@ -51,12 +49,17 @@ const LeaderBoard = () => {
   }, [leader]);
 
   // Filter leaderboard data based on selected category
-  const filteredData =
-    filter === "All"
-      ? leader
-      : leader.filter((entry) =>
-          entry.categoryScores.some((score) => score.category === filter)
-        );
+  const filteredData = useMemo(() => {
+    const filtered =
+      filter === "All"
+        ? leader
+        : leader.filter((entry) =>
+            entry.categoryScores.some((score) => score.category === filter)
+          );
+
+    // Sort by generalHighScore in descending order
+    return filtered.sort((a, b) => b.generalHighScore - a.generalHighScore);
+  }, [filter, leader]);
 
   // Handle loading state
   if (loading) {
