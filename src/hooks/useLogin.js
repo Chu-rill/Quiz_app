@@ -20,7 +20,11 @@ const useLogin = () => {
   };
 
   const login = async (username, password) => {
-    const success = handleInputErrors(username, password);
+    // Trim the inputs before handling errors
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    const success = handleInputErrors(trimmedUsername, trimmedPassword);
 
     if (!success) return;
     setLoading(true);
@@ -28,7 +32,10 @@ const useLogin = () => {
       const res = await fetch(`${api}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          username: trimmedUsername,
+          password: trimmedPassword,
+        }),
       });
       const data = await res.json();
 

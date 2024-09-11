@@ -3,12 +3,20 @@ import { toast } from "react-hot-toast"; // Make sure to install and import toas
 import { useAuthContext } from "../context/AuthContext";
 import { storeToken } from "../utils/jwt";
 import { api } from "../utils/api";
+
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
 
   const signup = async ({ username, password }) => {
-    const success = handleInputErrors({ username, password });
+    // Trim the inputs before handling errors
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    const success = handleInputErrors({
+      username: trimmedUsername,
+      password: trimmedPassword,
+    });
     if (!success) return;
 
     setLoading(true);
@@ -18,12 +26,14 @@ const useSignup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          username: trimmedUsername,
+          password: trimmedPassword,
+        }),
       });
 
       const data = await res.json();
       if (res.ok) {
-        // Check if response status is OK
         // Extract the token from the response
         const token = data.token;
 
@@ -56,7 +66,6 @@ function handleInputErrors({ username, password }) {
     return false;
   }
   if (password.length < 6) {
-    // Corrected typo here
     toast.error("Password must be more than 6 characters");
     return false;
   }
