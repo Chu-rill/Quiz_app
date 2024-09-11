@@ -72,7 +72,7 @@ const Home = () => {
           >
             View Leader-Board
           </Link>
-          <Link to="/leader">
+          <Link to="/create">
             <button className="btn btn-accent">Create Quiz</button>
           </Link>
         </div>
