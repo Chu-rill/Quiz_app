@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { getToken } from "../utils/jwt";
 import { api } from "../utils/api";
 
-const useCreateQuiz = () => {
+const useCreateQuiz = (navigate) => {
   const [quizData, setQuizData] = useState({
     title: "",
     category: "",
@@ -106,6 +106,9 @@ const useCreateQuiz = () => {
     } finally {
       setLoading(false);
     }
+
+    // Navigate to the home page
+    navigate("/");
   };
 
   return {

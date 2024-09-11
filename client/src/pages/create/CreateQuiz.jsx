@@ -1,131 +1,8 @@
-// import React from "react";
-// import useCreateQuiz from "../../hooks/useCreateQuiz";
-
-// const CreateQuiz = () => {
-//   const {
-//     quizData,
-//     error,
-//     loading,
-//     handleInputChange,
-//     handleQuestionChange,
-//     handleOptionChange,
-//     handleCorrectOptionChange,
-//     addQuestion,
-//     submitQuiz,
-//   } = useCreateQuiz();
-
-//   return (
-//     <div className=" flex flex-col items-center justify-center min-w-96 mx-auto ">
-//       <div className=" w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 ">
-//         <h1 className=" text-2xl text-center underline mb-2">
-//           Create a New Quiz
-//         </h1>
-//         <form onSubmit={(e) => e.preventDefault()}>
-//           <div>
-//             <label>
-//               Title:
-//               <input
-//                 type="text"
-//                 name="title"
-//                 className=" w-full input input-bordered h-10 "
-//                 value={quizData.title}
-//                 onChange={handleInputChange}
-//               />
-//             </label>
-//           </div>
-//           <div>
-//             <label>
-//               Category:
-//               <input
-//                 type="text"
-//                 name="category"
-//                 className=" w-full input input-bordered h-10 "
-//                 value={quizData.category}
-//                 onChange={handleInputChange}
-//               />
-//             </label>
-//           </div>
-//           <div>
-//             <label>
-//               Level:
-//               <input
-//                 type="text"
-//                 name="level"
-//                 className=" w-full input input-bordered h-10 "
-//                 value={quizData.level}
-//                 onChange={handleInputChange}
-//               />
-//             </label>
-//           </div>
-
-//           {quizData.questions.map((question, qIndex) => (
-//             <div key={qIndex}>
-//               <h2>Question {qIndex + 1}</h2>
-//               <label>
-//                 Question Text:
-//                 <input
-//                   type="text"
-//                   name="questionText"
-//                   value={question.questionText}
-//                   onChange={(e) => handleQuestionChange(qIndex, e)}
-//                 />
-//               </label>
-//               {question.options.map((option, oIndex) => (
-//                 <div key={oIndex}>
-//                   <label>
-//                     Option {oIndex + 1}:
-//                     <input
-//                       type="text"
-//                       name="text"
-//                       value={option.text}
-//                       onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
-//                     />
-//                   </label>
-//                   <label>
-//                     <input
-//                       type="radio"
-//                       name="isCorrect"
-//                       checked={option.isCorrect}
-//                       onChange={() => handleCorrectOptionChange(qIndex, oIndex)}
-//                     />
-//                     Correct
-//                   </label>
-//                 </div>
-//               ))}
-//             </div>
-//           ))}
-
-//           <div className=" flex justify-between items-center mt-3">
-//             <button
-//               type="button"
-//               className="btn btn-primary"
-//               onClick={addQuestion}
-//             >
-//               Add Question
-//             </button>
-//             <button
-//               type="button"
-//               className="btn btn-accent"
-//               onClick={submitQuiz}
-//               disabled={loading}
-//             >
-//               {loading ? "Creating..." : "Create Quiz"}
-//             </button>
-//           </div>
-
-//           {error && <div style={{ color: "red" }}>{error}</div>}
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CreateQuiz;
-
 import React from "react";
 import useCreateQuiz from "../../hooks/useCreateQuiz";
-
+import { useNavigate } from "react-router-dom";
 const CreateQuiz = () => {
+  const navigate = useNavigate();
   const {
     quizData,
     error,
@@ -136,7 +13,7 @@ const CreateQuiz = () => {
     handleCorrectOptionChange,
     addQuestion,
     submitQuiz,
-  } = useCreateQuiz();
+  } = useCreateQuiz(navigate);
 
   return (
     <div className=" flex flex-col items-center justify-center min-w-96 mx-auto ">
