@@ -1,8 +1,42 @@
-# React + Vite
+# Trivio Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for **Trivio**, a fullstack quiz application that allows users to create quizzes, answer questions from various categories, track scores, and view the leaderboard. The frontend is built using **React** and connects to the backend via a RESTful API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User authentication and quiz creation.
+- Answer questions from various categories.
+- Filter quizzes by category and difficulty.
+- Leaderboard to track high scores.
+- Responsive design for a smooth user experience.
+
+## Tech Stack
+
+- **React**
+- **TailwindCSS** for styling
+- **React Router** for navigation
+- **Axios** for API calls
+
+## Installation
+
+1. Clone the frontend repository:
+   ```bash
+   git clone https://github.com/username/trivio-frontend.git
+   cd trivio-frontend
+   ```
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+# API
+
+This frontend connects to the Trivio backend. You can find the backend repo [here](https://github.com/Chu-rill/Quiz_app--backend).
+
+# Deployment
+
+The frontend is deployed on Vercel.
