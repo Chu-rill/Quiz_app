@@ -40,3 +40,7 @@ This frontend connects to the Trivio backend. You can find the backend repo [her
 # Deployment
 
 The frontend is deployed on Vercel.
+
+# Contributing
+
+Contributions are welcome. Fork the repository, make changes, and submit a pull request.
